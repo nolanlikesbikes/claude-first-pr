@@ -1,6 +1,6 @@
 # claude-first-pr
 
-A small practice repository for shiping a first pull request with Claude Code.
+A small practice repository for shipping a first pull request with Claude Code.
 
 ## What is this?
 
