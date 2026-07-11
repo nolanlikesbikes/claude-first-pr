@@ -1,0 +1,30 @@
+:root {
+  /* ---- Spacing scale (4px base) ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* ---- Radii — soft & playful (Wii-Sports-menu rounded) ---- */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 999px;
+
+  /* ---- Touch targets — generous, for older-adult accessibility ---- */
+  --tap-target-min: 56px;
+  --tap-target-comfortable: 64px;
+
+  /* ---- Container widths ---- */
+  --container-mobile: 428px;
+  --container-desktop: 1280px;
+}

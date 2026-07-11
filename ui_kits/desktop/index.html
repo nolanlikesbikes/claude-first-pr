@@ -1,0 +1,207 @@
+<!-- @dsCard group="Desktop" viewport="1280x760" subtitle="Home dashboard, Game Detail, Progress — click-through" -->
+<!-- @startingPoint section="Desktop app" subtitle="Sidebar dashboard, Game Detail, Progress" viewport="1280x760" -->
+<html>
+<head>
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="../../components/kit-loader.js"></script>
+<style>
+  html, body { margin:0; background: var(--color-bg-alt); }
+  #app { width:1280px; min-height:800px; margin:0 auto; display:flex; background:var(--color-bg); }
+  @keyframes contentIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .kn-content { animation: contentIn 800ms var(--ease-out); }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script type="text/plain" id="app-src">
+async function main() {
+await window.loadKeenComponents([
+  '../../components/forms/Button.jsx',
+  '../../components/forms/Switch.jsx',
+  '../../components/feedback/Badge.jsx',
+  '../../components/feedback/Tag.jsx',
+  '../../components/feedback/ProgressBar.jsx',
+  '../../components/navigation/Tabs.jsx',
+  '../../components/surfaces/Card.jsx',
+  '../../components/surfaces/GameCard.jsx',
+]);
+const { Button, Switch, Badge, Tag, ProgressBar, Tabs, Card, GameCard } = window.Keen;
+
+const ICON = (name, size=22) => <i data-lucide={name} style={{width:size, height:size}}></i>;
+
+const GAMES = [
+  { id:'word', title:'Word Recall', category:'memory', stat:'Best: 1,240', icon:'brain' },
+  { id:'focus', title:'Steady Focus', category:'focus', stat:'Best: 980', icon:'target' },
+  { id:'speed', title:'Quick Match', category:'speed', stat:'Best: 2,110', icon:'zap' },
+  { id:'lang', title:'Word Ladder', category:'language', stat:'Best: 640', icon:'type' },
+  { id:'logic', title:'Number Path', category:'logic', stat:'Best: 1,530', icon:'puzzle' },
+  { id:'mem2', title:'Pattern Match', category:'memory', stat:'Best: 870', icon:'grid-3x3' },
+  { id:'plum', title:'Story Chain', category:'language', stat:'Best: 410', icon:'book-open' },
+  { id:'gold2', title:'Reaction Tap', category:'speed', stat:'Best: 1,980', icon:'flame' },
+];
+
+function Sidebar({ nav, onNav }) {
+  const items = [
+    { v:'home', i:'house', l:'Home' },
+    { v:'progress', i:'trending-up', l:'Progress' },
+    { v:'settings', i:'settings', l:'Settings' },
+  ];
+  return (
+    <div style={{width:240, flexShrink:0, background:'var(--color-surface)', borderRight:'1px solid var(--color-border)', padding:'32px 20px', display:'flex', flexDirection:'column', gap:8}}>
+      <div style={{fontFamily:'var(--font-display)', fontWeight:800, fontSize:28, color:'var(--color-text)', marginBottom:24, paddingLeft:12}}>Keen</div>
+      {items.map(it => (
+        <button key={it.v} onClick={() => onNav(it.v)} style={{
+          display:'flex', alignItems:'center', gap:14, padding:'14px 16px', borderRadius:'var(--radius-md)',
+          border:'none', cursor:'pointer', textAlign:'left', fontFamily:'var(--font-body)', fontSize:17, fontWeight:600,
+          background: nav===it.v ? 'var(--color-primary-soft)' : 'transparent',
+          color: nav===it.v ? 'var(--accent-terracotta-strong)' : 'var(--color-text)',
+        }}>
+          {ICON(it.i, 22)}{it.l}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function TopBar({ title }) {
+  return (
+    <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', padding:'32px 40px 0'}}>
+      <div style={{fontFamily:'var(--font-display)', fontWeight:800, fontSize:34, color:'var(--color-text)'}}>{title}</div>
+      <div style={{width:52, height:52, borderRadius:'50%', background:'var(--accent-gold-soft)', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'var(--font-display)', fontWeight:700, color:'#7a5a00'}}>R</div>
+    </div>
+  );
+}
+
+function HomeScreen({ onOpenGame }) {
+  return (
+    <div style={{flex:1}}>
+      <TopBar title="Hi, Rosa" />
+      <div style={{padding:'8px 40px 0', fontFamily:'var(--font-body)', fontSize:18, color:'var(--color-text-muted)'}}>
+        You're on a 4-day streak. Keep it going.
+      </div>
+      <div style={{padding:'24px 40px'}}>
+        <Card style={{background:'var(--color-secondary)', color:'var(--color-text-on-accent)', display:'flex', alignItems:'center', gap:40}}>
+          <div style={{flex:1}}>
+            <ProgressBar label="Weekly goal" value={4} max={7} tone="info" />
+          </div>
+          <div style={{fontFamily:'var(--font-display)', fontSize:40, fontWeight:800}}>86<span style={{fontSize:18, fontWeight:500}}> min this week</span></div>
+        </Card>
+      </div>
+      <div style={{padding:'0 40px 8px', fontFamily:'var(--font-display)', fontWeight:700, fontSize:22, color:'var(--color-text)'}}>Your games</div>
+      <div style={{display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:20, padding:'16px 40px 40px'}}>
+        {GAMES.map(g => (
+          <GameCard key={g.id} icon={ICON(g.icon, 26)} title={g.title} category={g.category} stat={g.stat} onClick={() => onOpenGame(g)} style={{width:'auto'}} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ProgressScreen() {
+  const [range, setRange] = React.useState('week');
+  return (
+    <div style={{flex:1}}>
+      <TopBar title="Progress" />
+      <div style={{padding:'20px 40px 0'}}>
+        <Tabs value={range} onChange={setRange} tabs={[{value:'week',label:'This week'},{value:'all',label:'All time'}]} />
+      </div>
+      <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:20, padding:'24px 40px'}}>
+        <Card><div style={{fontFamily:'var(--font-display)', fontSize:40, fontWeight:800}}>86</div><div style={{color:'var(--color-text-muted)', marginTop:6}}>Minutes played</div></Card>
+        <Card><div style={{fontFamily:'var(--font-display)', fontSize:40, fontWeight:800}}>4</div><div style={{color:'var(--color-text-muted)', marginTop:6}}>Day streak</div></Card>
+        <Card><div style={{fontFamily:'var(--font-display)', fontSize:40, fontWeight:800}}>12</div><div style={{color:'var(--color-text-muted)', marginTop:6}}>Sessions completed</div></Card>
+      </div>
+      <div style={{padding:'0 40px 40px', display:'flex', flexDirection:'column', gap:12}}>
+        {GAMES.slice(0,4).map(g => (
+          <Card key={g.id} style={{display:'flex', alignItems:'center', gap:16, padding:'16px 20px'}}>
+            <div style={{width:48,height:48,borderRadius:'var(--radius-md)', background:'var(--accent-forest-soft)', display:'flex', alignItems:'center', justifyContent:'center'}}>{ICON(g.icon,24)}</div>
+            <div style={{flex:1}}>
+              <div style={{fontWeight:700, fontFamily:'var(--font-body)', fontSize:17}}>{g.title}</div>
+              <div style={{fontSize:14, color:'var(--color-text-muted)'}}>{g.stat}</div>
+            </div>
+            <Tag category={g.category}>{g.category}</Tag>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function GameScreen({ game, onBack }) {
+  return (
+    <div style={{flex:1}}>
+      <div style={{padding:'32px 40px 0', display:'flex', alignItems:'center', gap:16}}>
+        <button onClick={onBack} style={{width:44,height:44,borderRadius:'50%',border:'none',background:'var(--n-20)',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'}}>{ICON('chevron-left',22)}</button>
+        <div style={{fontFamily:'var(--font-display)', fontWeight:800, fontSize:32, color:'var(--color-text)'}}>{game.title}</div>
+        <Tag category={game.category}>{game.category}</Tag>
+      </div>
+      <div style={{display:'flex', gap:24, padding:'24px 40px'}}>
+        <div style={{flex:1, height:420, borderRadius:'var(--radius-lg)', background:'var(--n-20)', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'monospace', fontSize:14, color:'var(--color-text-muted)'}}>
+          game preview
+        </div>
+        <div style={{width:280, display:'flex', flexDirection:'column', gap:16}}>
+          <Card><div style={{fontFamily:'var(--font-body)', color:'var(--color-text-muted)'}}>Personal best</div><div style={{fontFamily:'var(--font-display)', fontSize:32, fontWeight:800}}>{game.stat.replace('Best: ','')}</div></Card>
+          <Button size="lg" style={{width:'100%'}}>Play now</Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SettingsScreen() {
+  const [reminders, setReminders] = React.useState(true);
+  const [sound, setSound] = React.useState(false);
+  return (
+    <div style={{flex:1}}>
+      <TopBar title="Settings" />
+      <div style={{padding:'24px 40px', display:'flex', flexDirection:'column', gap:16, maxWidth:480}}>
+        <Card style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+          <span style={{fontFamily:'var(--font-body)', fontSize:18}}>Daily reminders</span>
+          <Switch checked={reminders} onChange={e=>setReminders(e.target.checked)} />
+        </Card>
+        <Card style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+          <span style={{fontFamily:'var(--font-body)', fontSize:18}}>Sound effects</span>
+          <Switch checked={sound} onChange={e=>setSound(e.target.checked)} />
+        </Card>
+        <Button variant="outline" style={{alignSelf:'flex-start'}}>Sign out</Button>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [nav, setNav] = React.useState('home');
+  const [game, setGame] = React.useState(null);
+  const contentKey = game ? 'game-' + game.id : nav;
+  return (
+    <>
+      <Sidebar nav={nav} onNav={(v) => { setNav(v); setGame(null); }} />
+      <div key={contentKey} className="kn-content" style={{ flex: 1, display: 'flex' }}>
+        {game ? (
+          <GameScreen game={game} onBack={() => setGame(null)} />
+        ) : nav === 'home' ? (
+          <HomeScreen onOpenGame={setGame} />
+        ) : nav === 'progress' ? (
+          <ProgressScreen />
+        ) : (
+          <SettingsScreen />
+        )}
+      </div>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('app')).render(<App />);
+setInterval(() => { if (window.lucide) window.lucide.createIcons(); }, 300);
+}
+main();
+</script>
+<script>window.runBabelApp('app-src');</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+/* ==========================================================================
+   Keen — Color tokens
+   Warm, clinical-but-playful palette. Neutrals lean warm (cream/ink).
+   Accent hues share chroma/lightness bands for harmony (oklch).
+   ========================================================================== */
+
+:root {
+  /* ---- Base neutrals (warm-toned) ---- */
+  --n-0: oklch(99% 0.006 70);     /* page background, warm cream */
+  --n-10: oklch(97.5% 0.008 65);  /* app background alt */
+  --n-20: oklch(94.5% 0.010 60);  /* subtle fill / muted surface */
+  --n-30: oklch(90% 0.014 55);    /* borders */
+  --n-40: oklch(82% 0.016 55);    /* stronger borders / dividers */
+  --n-60: oklch(62% 0.018 50);    /* muted text */
+  --n-80: oklch(38% 0.018 45);    /* body text */
+  --n-90: oklch(24% 0.018 45);    /* headings / high-emphasis text */
+  --n-100: oklch(15% 0.014 45);   /* max-emphasis ink */
+  --n-white: oklch(100% 0 0);
+
+  /* ---- Brand accents — shared L≈0.66–0.70 / C≈0.11–0.14, hue varies ---- */
+  --accent-terracotta: oklch(68% 0.140 42);   /* primary */
+  --accent-terracotta-strong: oklch(58% 0.150 38);
+  --accent-terracotta-soft: oklch(93% 0.035 42);
+
+  --accent-forest: oklch(55% 0.100 162);      /* secondary */
+  --accent-forest-strong: oklch(46% 0.095 160);
+  --accent-forest-soft: oklch(93% 0.030 162);
+
+  --accent-sky: oklch(70% 0.110 240);         /* tertiary — game category */
+  --accent-sky-soft: oklch(94% 0.025 240);
+
+  --accent-gold: oklch(80% 0.135 88);         /* tertiary — game category */
+  --accent-gold-soft: oklch(95% 0.040 88);
+
+  --accent-plum: oklch(58% 0.110 320);        /* tertiary — game category */
+  --accent-plum-soft: oklch(93% 0.030 320);
+
+  /* ---- Semantic status ---- */
+  --status-success: var(--accent-forest);
+  --status-success-soft: var(--accent-forest-soft);
+  --status-warning: oklch(78% 0.140 70);
+  --status-warning-soft: oklch(95% 0.045 70);
+  --status-danger: oklch(56% 0.165 25);
+  --status-danger-soft: oklch(94% 0.045 25);
+  --status-info: var(--accent-sky);
+  --status-info-soft: var(--accent-sky-soft);
+
+  /* ---- Semantic aliases (use these in product code) ---- */
+  --color-bg: var(--n-0);
+  --color-bg-alt: var(--n-10);
+  --color-surface: var(--n-white);
+  --color-surface-raised: var(--n-white);
+  --color-surface-sunken: var(--n-20);
+
+  --color-text: var(--n-90);
+  --color-text-muted: var(--n-60);
+  --color-text-inverse: var(--n-0);
+  --color-text-on-accent: var(--n-white);
+
+  --color-border: var(--n-30);
+  --color-border-strong: var(--n-40);
+
+  --color-primary: var(--accent-terracotta);
+  --color-primary-hover: var(--accent-terracotta-strong);
+  --color-primary-soft: var(--accent-terracotta-soft);
+
+  --color-secondary: var(--accent-forest);
+  --color-secondary-hover: var(--accent-forest-strong);
+  --color-secondary-soft: var(--accent-forest-soft);
+
+  --color-focus-ring: oklch(68% 0.140 42 / 45%);
+}
